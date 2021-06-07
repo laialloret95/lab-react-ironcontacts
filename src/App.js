@@ -1,31 +1,54 @@
-import logo from './logo.svg';
 import './App.css';
-import contacts from "./contacts.json";
+import contactsDB from "./contacts.json";
+import { Component } from 'react';
 
-const first5contacts = contacts.slice(0, 5);
+const first5contacts = contactsDB.slice(0, 5);
 
-const App = () => {
-  return (
-    <div className="App">
-      <table>
-        <tr>
-          <th>Name</th>
-          <th>Picture</th>
-          <th>Popularity</th>
-        </tr>
-            { first5contacts.map((contact) => {
-                return (
-                  <tr>
-                    <td> <img src={contact.pictureUrl} alt="profile-pic"/> </td>
-                    <td>{contact.name}</td>
-                    <td>{contact.popularity.toFixed(2)}</td>
-                  </tr>
-                )
-              })
-            }
-      </table>
-    </div>
-  );
+class App extends Component {
+  constructor(props) {
+    super(props)
+    this.state = {
+      contacts: first5contacts
+    }
+  }
+
+  addRandomContact = () => {
+    const rndContact =  contactsDB[Math.floor(Math.random() * (contactsDB.length - 6 + 1)) + 6];
+    const newContacts = [rndContact, ...this.state.contacts];
+
+    this.setState({
+      contacts: newContacts
+    })
+  }
+
+  render() {
+
+    return (
+      <div className="App">
+        <button onClick={this.addRandomContact}> Add Random Contact </button>
+        <table>
+          <tbody>
+            <tr>
+              <th>Name</th>
+              <th>Picture</th>
+              <th>Popularity</th>
+            </tr>
+                { this.state.contacts.map((contact, index) => {
+                    return (
+                      <tr key={index}>
+                        <td> <img src={contact.pictureUrl} alt="profile-pic"/> </td>
+                        <td>{contact.name}</td>
+                        <td>{contact.popularity.toFixed(2)}</td>
+                      </tr>
+                    )
+                  })
+                }
+          </tbody>
+        </table>
+      </div>
+    );
+  }
+
 }
 
 export default App;
