@@ -21,11 +21,35 @@ class App extends Component {
     })
   }
 
+  sortByName = () => {
+    const copyContacts = [...this.state.contacts];
+
+    copyContacts.sort((a,b) => { 
+      return a.name.localeCompare(b.name) 
+    });
+
+    this.setState({
+      contacts: copyContacts
+    })
+  }
+
+  sortByPopularity = () => {
+    const copyContacts = [...this.state.contacts];
+    
+    copyContacts.sort((a, b) => (a.popularity < b.popularity) ? 1 : -1)
+
+    this.setState({
+      contacts: copyContacts
+    })
+  }
+
   render() {
 
     return (
       <div className="App">
         <button onClick={this.addRandomContact}> Add Random Contact </button>
+        <button onClick={this.sortByName}> Sort By Name </button>
+        <button onClick={this.sortByPopularity}> Sort By Popularity </button>
         <table>
           <tbody>
             <tr>
