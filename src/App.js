@@ -14,37 +14,49 @@ class App extends Component {
 
   addRandomContact = () => {
     const rndContact =  contactsDB[Math.floor(Math.random() * (contactsDB.length - 6 + 1)) + 6];
-    const newContacts = [rndContact, ...this.state.contacts];
+    const contactList = [rndContact, ...this.state.contacts];
 
     this.setState({
-      contacts: newContacts
+      contacts: contactList
     })
   }
 
   sortByName = () => {
-    const copyContacts = [...this.state.contacts];
+    const contactList = [...this.state.contacts];
 
-    copyContacts.sort((a,b) => { 
+    contactList.sort((a,b) => { 
       return a.name.localeCompare(b.name) 
     });
 
     this.setState({
-      contacts: copyContacts
+      contacts: contactList
     })
   }
 
   sortByPopularity = () => {
-    const copyContacts = [...this.state.contacts];
+    const contactList = [...this.state.contacts];
     
-    copyContacts.sort((a, b) => (a.popularity < b.popularity) ? 1 : -1)
+    contactList.sort((a, b) => (a.popularity < b.popularity) ? 1 : -1)
 
     this.setState({
-      contacts: copyContacts
+      contacts: contactList
+    })
+  }
+
+  deleteContact = (ID) => {
+    const contactIndex = this.state.contacts.findIndex(contact => contact.id === ID )
+    console.log(contactIndex);
+
+    const contactList = [...this.state.contacts]
+
+    contactList.splice(contactIndex, 1)
+
+    this.setState({
+      contacts: contactList
     })
   }
 
   render() {
-
     return (
       <div className="App">
         <button onClick={this.addRandomContact}> Add Random Contact </button>
@@ -56,6 +68,7 @@ class App extends Component {
               <th>Name</th>
               <th>Picture</th>
               <th>Popularity</th>
+              <th>Action </th>
             </tr>
                 { this.state.contacts.map((contact, index) => {
                     return (
@@ -63,6 +76,11 @@ class App extends Component {
                         <td> <img src={contact.pictureUrl} alt="profile-pic"/> </td>
                         <td>{contact.name}</td>
                         <td>{contact.popularity.toFixed(2)}</td>
+                        <td> 
+                          <button onClick={() => this.deleteContact(contact.id)}>
+                            Delete
+                          </button> 
+                        </td>
                       </tr>
                     )
                   })
@@ -72,7 +90,6 @@ class App extends Component {
       </div>
     );
   }
-
 }
 
 export default App;
